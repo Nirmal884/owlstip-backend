@@ -1,0 +1,75 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String // Encrypted hashed password
+  createdAt DateTime @default(now())
+
+  @@map("admins")
+}
+
+model Job {
+  id               String        @id @default(uuid())
+  title            String
+  description      String
+  requirements     String[]
+  responsibilities String[]
+  department       String
+  location         String // Remote, Hybrid, Onsite
+  type             String // Full-time, Part-time
+  status           String        @default("DRAFT") // DRAFT, ACTIVE, CLOSED
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  deletedAt        DateTime?
+  applications     Application[]
+
+  @@map("jobs")
+}
+
+model Application {
+  id            String   @id @default(uuid())
+  jobId         String
+  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  name          String
+  email         String
+  phone         String
+  experience    String
+  socialProfile String?
+  coverLetter   String?
+  resumeUrl     String
+  status        String   @default("APPLIED")
+  createdAt     DateTime @default(now())
+
+  @@map("applications")
+}
+
+model Contact {
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  phone      String?
+  services   String[]
+  message    String
+  isResolved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@map("contacts")
+}
+
+enum ServiceType {
+  WEB_DEVELOPMENT
+  APP_DEVELOPMENT
+  UI_UX_DESIGN
+  DIGITAL_MARKETING
+  SEO_OPTIMIZATION
+  BRANDING
+  OTHERS
+}
+
