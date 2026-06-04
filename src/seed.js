@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const email = "admin@owlstip.com";
-  const rawPassword = "admin123";
+  const rawPassword = "Admin@2026";
 
   console.log("🌱 Database Seeding: Creating default Administrator account...");
 
