@@ -47,9 +47,9 @@ export async function getJobDetail(req, res) {
 // Admin: Create a new job vacancy
 export async function createJob(req, res) {
   try {
-    const { title, department, location, type, description, requirements, responsibilities, status } = req.body;
+    const { title, department, location, type, description, requirements, responsibilities, status, experience } = req.body;
 
-    if (!title || !department || !location || !type || !description || !requirements || !responsibilities) {
+    if (!title || !department || !location || !type || !description || !requirements || !responsibilities || !experience) {
       return res.status(400).json({ error: "All fields except status are required." });
     }
 
@@ -61,6 +61,7 @@ export async function createJob(req, res) {
       description,
       requirements,
       responsibilities,
+      experience,
       status: status || "DRAFT",
     });
 

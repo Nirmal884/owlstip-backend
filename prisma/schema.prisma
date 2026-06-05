@@ -19,6 +19,7 @@ model Job {
   id               String        @id @default(uuid())
   title            String
   description      String
+  experience       String?
   requirements     String[]
   responsibilities String[]
   department       String
@@ -72,4 +73,3 @@ enum ServiceType {
   BRANDING
   OTHERS
 }
-

@@ -60,7 +60,7 @@ export async function getJobById(id) {
 
 /**
  * Create a new job vacancy.
- * @param {Object} jobData - Title, department, location, type, description, requirements, status
+ * @param {Object} jobData
  */
 export async function createJob(jobData) {
   return await prisma.job.create({
@@ -72,6 +72,7 @@ export async function createJob(jobData) {
       department: jobData.department,
       location: jobData.location,
       type: jobData.type,
+      experience: jobData.experience,
       status: jobData.status || "DRAFT",
     },
   });
