@@ -66,6 +66,7 @@ export async function createJob(jobData) {
   return await prisma.job.create({
     data: {
       title: jobData.title,
+      slug: jobData.slug,
       description: jobData.description,
       requirements: jobData.requirements,
       responsibilities: jobData.responsibilities,

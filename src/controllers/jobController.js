@@ -1,4 +1,5 @@
 import * as jobModel from "../models/jobModel.js";
+import { generateUniqueSlug } from "../utils/slugify.js";
 
 // Public: Fetch all active job postings
 export async function getPublicJobs(req, res) {
@@ -53,8 +54,11 @@ export async function createJob(req, res) {
       return res.status(400).json({ error: "All fields except status are required." });
     }
 
+    const slug = await generateUniqueSlug(title);
+
     const newJob = await jobModel.createJob({
       title,
+      slug,
       department,
       location,
       type,
