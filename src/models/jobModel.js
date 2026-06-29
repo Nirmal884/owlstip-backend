@@ -95,6 +95,7 @@ export async function updateJob(id, jobData) {
       department: jobData.department,
       location: jobData.location,
       type: jobData.type,
+      experience: jobData.experience,
       status: jobData.status,
     },
   });

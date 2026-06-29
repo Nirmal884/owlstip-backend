@@ -80,7 +80,7 @@ export async function createJob(req, res) {
 export async function updateJob(req, res) {
   try {
     const { id } = req.params;
-    const { title, department, location, type, description, requirements, responsibilities, status } = req.body;
+    const { title, department, location, type, experience, description, requirements, responsibilities, status } = req.body;
 
     const existingJob = await jobModel.getJobById(id);
     if (!existingJob) {
@@ -92,6 +92,7 @@ export async function updateJob(req, res) {
       department: department || existingJob.department,
       location: location || existingJob.location,
       type: type || existingJob.type,
+      experience: experience || existingJob.experience,
       description: description || existingJob.description,
       requirements: requirements || existingJob.requirements,
       responsibilities: responsibilities || existingJob.responsibilities,
