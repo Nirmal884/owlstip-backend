@@ -59,6 +59,20 @@ export async function getJobById(id) {
 }
 
 /**
+ * Get a specific active job posting by ID for public view.
+ * @param {string} id - The job UUID
+ */
+export async function getPublicJobById(id) {
+  return await prisma.job.findFirst({
+    where: {
+      id,
+      status: "ACTIVE",
+      deletedAt: null,
+    },
+  });
+}
+
+/**
  * Create a new job vacancy.
  * @param {Object} jobData
  */

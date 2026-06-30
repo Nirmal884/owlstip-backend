@@ -45,6 +45,21 @@ export async function getJobDetail(req, res) {
   }
 }
 
+// Public: Fetch details of a single active job
+export async function getPublicJobDetail(req, res) {
+  try {
+    const { id } = req.params;
+    const job = await jobModel.getPublicJobById(id);
+    if (!job) {
+      return res.status(404).json({ error: "Job posting not found." });
+    }
+    return res.status(200).json(job);
+  } catch (error) {
+    console.error("[jobController.getPublicJobDetail] Error:", error);
+    return res.status(500).json({ error: "Failed to fetch job details." });
+  }
+}
+
 // Admin: Create a new job vacancy
 export async function createJob(req, res) {
   try {
