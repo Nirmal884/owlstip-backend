@@ -47,6 +47,7 @@ model Application {
   coverLetter   String?
   resumeUrl     String
   status        String   @default("APPLIED")
+  isBookmarked  Boolean  @default(false)
   createdAt     DateTime @default(now())
 
   @@map("applications")

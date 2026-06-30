@@ -103,3 +103,26 @@ export async function updateStatus(req, res) {
     return res.status(500).json({ error: "Failed to update application status." });
   }
 }
+
+// Admin: Update bookmark status of an application
+export async function toggleBookmark(req, res) {
+  try {
+    const { id } = req.params;
+    const { isBookmarked } = req.body;
+
+    if (typeof isBookmarked !== "boolean") {
+      return res.status(400).json({ error: "isBookmarked must be a boolean value." });
+    }
+
+    const existingApp = await applicationModel.getApplicationById(id);
+    if (!existingApp) {
+      return res.status(404).json({ error: "Application record not found." });
+    }
+
+    const updatedApp = await applicationModel.updateApplicationBookmark(id, isBookmarked);
+    return res.status(200).json(updatedApp);
+  } catch (error) {
+    console.error("[applicationController.toggleBookmark] Error:", error);
+    return res.status(500).json({ error: "Failed to update bookmark status." });
+  }
+}

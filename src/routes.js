@@ -44,6 +44,7 @@ router.delete("/admin/jobs/:id", authMiddleware, jobController.deleteJob);
 
 router.get("/admin/applications", authMiddleware, applicationController.getAdminApplications);
 router.put("/admin/applications/:id/status", authMiddleware, applicationController.updateStatus);
+router.put("/admin/applications/:id/bookmark", authMiddleware, applicationController.toggleBookmark);
 
 router.get("/admin/enquiry", authMiddleware, contactController.getAdminContacts);
 router.put("/admin/enquiry/:id/resolve", authMiddleware, contactController.toggleResolved);

@@ -115,3 +115,24 @@ export async function updateApplicationStatus(id, status) {
     },
   });
 }
+
+/**
+ * Update the bookmark status of an application.
+ * @param {string} id - Application UUID
+ * @param {boolean} isBookmarked - true or false
+ */
+export async function updateApplicationBookmark(id, isBookmarked) {
+  return await prisma.application.update({
+    where: { id },
+    data: { isBookmarked },
+    include: {
+      job: {
+        select: {
+          title: true,
+          department: true,
+          location: true,
+        },
+      },
+    },
+  });
+}
