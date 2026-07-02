@@ -91,3 +91,21 @@ export async function toggleResolved(req, res) {
     return res.status(500).json({ error: "Failed to update resolution status." });
   }
 }
+
+export async function chatAi(req, res) {
+  try {
+    const { prompt } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({ error: "Prompt is required." })
+    }
+
+    const reply = await contactModel.chatAi(prompt)
+    return res.status(200).json({ message: reply })
+
+
+  } catch (error) {
+    console.log(error.message)
+    return res.status(500).json({ error: error.message })
+  }
+}

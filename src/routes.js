@@ -32,6 +32,7 @@ router.get("/public/jobs", jobController.getPublicJobs);
 router.get("/public/job/:id", jobController.getPublicJobDetail);
 router.post("/public/apply-job", upload.single("resume"), applicationController.submitApplication);
 router.post("/public/enquiry", contactController.submitContact);
+router.post("/public/chat", contactController.chatAi)
 
 // ==========================================
 // PRIVATE/ADMIN ENDPOINTS
