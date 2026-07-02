@@ -59,17 +59,19 @@ export async function submitApplication(req, res) {
 // Admin: Retrieve applications with optional status & job filtering
 export async function getAdminApplications(req, res) {
   try {
-    const { jobId, status, page, limit } = req.query;
+    const { jobId, status, today, search, page, limit } = req.query;
     const filter = {};
 
     if (jobId) filter.jobId = jobId;
     if (status) filter.status = status;
+    if (today === "true") filter.today = true;
+    if (search) filter.search = search;
 
     if (page && limit) {
       const pageNum = parseInt(page, 10) || 1;
       const limitNum = parseInt(limit, 10) || 10;
-      const { total, applications } = await applicationModel.getAllApplications(filter, pageNum, limitNum);
-      return res.status(200).json({ total, applications });
+      const { total, todayApplied, applied, reviewing, interview, rejected, applications } = await applicationModel.getAllApplications(filter, pageNum, limitNum);
+      return res.status(200).json({ total, todayApplied, applied, reviewing, interview, rejected, applications });
     }
 
     const applications = await applicationModel.getAllApplications(filter);

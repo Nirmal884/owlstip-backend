@@ -12,7 +12,34 @@ export async function getAllApplications(filter = {}, page, limit) {
     whereClause.jobId = filter.jobId;
   }
   if (filter.status) {
-    whereClause.status = filter.status;
+    const statuses = Array.isArray(filter.status)
+      ? filter.status
+      : typeof filter.status === "string"
+      ? filter.status.split(",").map((s) => s.trim())
+      : [filter.status];
+    whereClause.status = { in: statuses };
+  }
+  if (filter.today) {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+    whereClause.createdAt = {
+      gte: startOfToday,
+      lte: endOfToday,
+    };
+  }
+
+  if (filter.search) {
+    whereClause.OR = [
+      { name: { contains: filter.search, mode: "insensitive" } },
+      { email: { contains: filter.search, mode: "insensitive" } },
+      {
+        job: {
+          title: { contains: filter.search, mode: "insensitive" },
+        },
+      },
+    ];
   }
 
   if (page && limit) {
@@ -20,8 +47,23 @@ export async function getAllApplications(filter = {}, page, limit) {
     const limitNum = Number(limit) || 10;
     const skip = (pageNum - 1) * limitNum;
 
-    const [total, applications] = await prisma.$transaction([
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+
+    const baseWhere = filter.jobId ? { jobId: filter.jobId } : {};
+
+    const [total, todayApplied, applied, reviewing, interview, rejected, applications] = await prisma.$transaction([
       prisma.application.count({ where: whereClause }),
+      prisma.application.count({
+        where: { ...baseWhere, createdAt: { gte: startOfToday, lte: endOfToday } }
+      }),
+      prisma.application.count({ where: { ...baseWhere, status: "APPLIED" } }),
+      prisma.application.count({ where: { ...baseWhere, status: "REVIEWING" } }),
+      prisma.application.count({ where: { ...baseWhere, status: "INTERVIEW_SCHEDULED" } }),
+      prisma.application.count({ where: { ...baseWhere, status: "REJECTED" } }),
       prisma.application.findMany({
         where: whereClause,
         orderBy: { createdAt: "desc" },
@@ -38,7 +80,7 @@ export async function getAllApplications(filter = {}, page, limit) {
         },
       })
     ]);
-    return { total, applications };
+    return { total, todayApplied, applied, reviewing, interview, rejected, applications };
   }
 
   return await prisma.application.findMany({
