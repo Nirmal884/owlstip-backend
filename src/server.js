@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware Setup
 app.use(cors({
-  origin: "*", // Adjust for production environments
+  origin: ["https://owlstip.com/", "https://cms.owlstip.com"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
